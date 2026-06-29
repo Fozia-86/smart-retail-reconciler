@@ -1,0 +1,5 @@
+myvenv/
+__pycache__/
+.env
+service-account.json
+.pytest_cache/
