@@ -165,7 +165,7 @@ Google Cloud credentials should be configured using a Service Account.
 Add your Render Frontend URL here
 
 ```
-https://your-frontend.onrender.com
+https://smart-retail-reconciler-1.onrender.com
 ```
 
 ### Backend API
@@ -173,7 +173,7 @@ https://your-frontend.onrender.com
 Add your Backend URL here
 
 ```
-https://smart-retail-reconciler-1.onrender.com
+https://smart-retail-reconciler.onrender.com
 ```
 
 ---
@@ -191,7 +191,7 @@ https://smart-retail-reconciler-1.onrender.com
 
 ## Author
 
-**Sultan**
+**Fozia Tahira**
 
 AI Engineer | Python | Flask | React | Google Cloud
 
