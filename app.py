@@ -35,27 +35,119 @@ def home():
 # -------------------
 @app.route("/stats")
 def stats():
+
+    table = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"
+
+    query = f"""
+    SELECT
+        COUNT(*) AS invoices,
+        SUM(unit_price) AS revenue,
+        COUNT(DISTINCT vendor_name) AS vendors,
+        SUM(CASE WHEN rebate_eligible = FALSE THEN 1 ELSE 0 END) AS pending
+    FROM `{table}`
+    """
+
+    result = client.query(query).result()
+
+    row = list(result)[0]
+
     return {
-        "invoices": 120,
-        "revenue": 45000,
-        "vendors": 8,
-        "pending": 12
+        "invoices": row.invoices or 0,
+        "revenue": round(row.revenue or 0,2),
+        "vendors": row.vendors or 0,
+        "pending": row.pending or 0
     }
 
+@app.route("/invoices")
+def invoices():
+
+    table = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"
+
+    query = f"""
+    SELECT
+        sku_code,
+        vendor_name,
+        invoice_date,
+        unit_price,
+        rebate_eligible
+    FROM `{table}`
+    ORDER BY invoice_date DESC
+    LIMIT 10
+    """
+
+    result = client.query(query).result()
+
+    invoices = []
+
+    for row in result:
+
+        invoices.append({
+            "id": row.sku_code,
+            "vendor": row.vendor_name,
+            "date": row.invoice_date.strftime("%d %b %Y"),
+            "amount": f"${row.unit_price}",
+            "status": "Processed" if row.rebate_eligible else "Pending"
+        })
+
+    return invoices
+
+@app.route("/vendor-chart")
+def vendor_chart():
+
+    table = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"
+
+    query = f"""
+    SELECT
+        vendor_name,
+        COUNT(*) AS total
+    FROM `{table}`
+    GROUP BY vendor_name
+    ORDER BY total DESC
+    LIMIT 5
+    """
+
+    result = client.query(query).result()
+
+    data = []
+
+    for row in result:
+        data.append({
+            "name": row.vendor_name,
+            "value": row.total
+        })
+
+    return data
 
 # -------------------
 # CHART DATA ROUTE (FRONTEND USE)
 # -------------------
 @app.route("/chart-data")
 def chart_data():
-    return [
-        {"month": "Jan", "revenue": 1200},
-        {"month": "Feb", "revenue": 2100},
-        {"month": "Mar", "revenue": 1800},
-        {"month": "Apr", "revenue": 2800},
-        {"month": "May", "revenue": 3200},
-        {"month": "Jun", "revenue": 4200},
-    ]
+
+    table = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"
+
+    query = f"""
+    SELECT
+        FORMAT_DATE('%b', invoice_date) AS month,
+        SUM(unit_price) AS revenue
+    FROM `{table}`
+    GROUP BY month
+    ORDER BY MIN(invoice_date)
+    """
+
+    result = client.query(query).result()
+
+    chart = []
+
+    for row in result:
+        chart.append({
+            "month": row.month,
+            "revenue": float(row.revenue)
+        })
+
+    return chart
+
+    
 
 
 # -------------------
@@ -75,6 +167,7 @@ def process_event():
 
     print(bucket)
     print(filename)
+
 
     # Read CSV
     with open("data/customer_shopping_data.csv", newline="", encoding="utf-8") as file:

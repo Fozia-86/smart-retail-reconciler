@@ -1,12 +1,14 @@
 function SearchBar() {
   return (
     <div className="search-bar">
+
       <input
         type="text"
-        placeholder="🔍 Search invoices..."
+        placeholder="🔍 Search invoice or vendor..."
       />
 
       <button>Search</button>
+
     </div>
   );
 }

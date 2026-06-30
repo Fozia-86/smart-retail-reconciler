@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 function RevenueChart() {
-  const [data, setData] = useState([]);
+  const [data, setData] =useState([]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:8080/chart-data")
@@ -21,38 +21,45 @@ function RevenueChart() {
 
   return (
     <div className="chart-box">
-      <h2>Revenue Overview</h2>
+      <h2>Monthly Revenue</h2>
 
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(59, 130, 246, 0.15)" />
+      <ResponsiveContainer width="100%" height={220}>
+        <LineChart
+          data={data}
+          margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+        >
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="rgba(59,130,246,.15)"
+          />
+
           <XAxis
             dataKey="month"
-            stroke="#64748b"
-            style={{ fontSize: "12px" }}
+            stroke="#94a3b8"
+            style={{ fontSize: 12 }}
           />
-          <YAxis stroke="#64748b" style={{ fontSize: "12px" }} />
+
+          <YAxis
+            stroke="#94a3b8"
+            style={{ fontSize: 12 }}
+          />
+
           <Tooltip
             contentStyle={{
-              background: "rgba(15, 23, 42, 0.95)",
-              border: "1px solid rgba(59, 130, 246, 0.3)",
-              borderRadius: "8px",
-              color: "#cbd5e1",
+              background: "#1e293b",
+              border: "1px solid #334155",
+              borderRadius: "10px",
+              color: "white",
             }}
           />
+
           <Line
             type="monotone"
             dataKey="revenue"
             stroke="#38bdf8"
             strokeWidth={3}
-            dot={{
-              fill: "#38bdf8",
-              r: 5,
-            }}
-            activeDot={{
-              r: 7,
-              fill: "#60a5fa",
-            }}
+            dot={{ r: 4 }}
+            activeDot={{ r: 6 }}
           />
         </LineChart>
       </ResponsiveContainer>

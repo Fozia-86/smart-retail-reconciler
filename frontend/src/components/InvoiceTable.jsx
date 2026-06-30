@@ -1,47 +1,23 @@
+import { useEffect, useState } from "react";
+
 function InvoiceTable() {
-  const invoices = [
-    {
-      id: "INV-1001",
-      vendor: "Istanbul Mall",
-      date: "29 Jun 2026",
-      amount: "$250",
-      status: "Processed",
-    },
-    {
-      id: "INV-1002",
-      vendor: "Metro Store",
-      date: "29 Jun 2026",
-      amount: "$180",
-      status: "Pending",
-    },
-    {
-      id: "INV-1003",
-      vendor: "Forum Mall",
-      date: "28 Jun 2026",
-      amount: "$425",
-      status: "Processed",
-    },
-    {
-      id: "INV-1004",
-      vendor: "Carousel Mall",
-      date: "27 Jun 2026",
-      amount: "$360",
-      status: "Processed",
-    },
-    {
-      id: "INV-1005",
-      vendor: "Capitol Mall",
-      date: "26 Jun 2026",
-      amount: "$520",
-      status: "Pending",
-    },
-  ];
+
+  const [invoices, setInvoices] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8080/invoices")
+      .then((res) => res.json())
+      .then((data) => setInvoices(data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="table-container">
+
       <h2>Recent Invoices</h2>
 
       <table>
+
         <thead>
           <tr>
             <th>Invoice</th>
@@ -53,25 +29,42 @@ function InvoiceTable() {
         </thead>
 
         <tbody>
-          {invoices.map((inv) => (
-            <tr key={inv.id}>
-              <td style={{ fontWeight: 600, color: "#38bdf8" }}>{inv.id}</td>
+
+          {invoices.map((inv, index) => (
+
+            <tr key={index}>
+
+              <td style={{color:"#2563eb",fontWeight:"600"}}>
+                {inv.id}
+              </td>
+
               <td>{inv.vendor}</td>
+
               <td>{inv.date}</td>
-              <td style={{ fontWeight: 500 }}>{inv.amount}</td>
+
+              <td>{inv.amount}</td>
+
               <td>
+
                 <span
                   className={`status-badge status-${inv.status.toLowerCase()}`}
                 >
                   {inv.status}
                 </span>
+
               </td>
+
             </tr>
+
           ))}
+
         </tbody>
+
       </table>
+
     </div>
   );
+
 }
 
 export default InvoiceTable;

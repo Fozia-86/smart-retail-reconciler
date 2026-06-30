@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import StatCard from "./components/StatCard";
-import InvoiceTable from "./components/InvoiceTable";
-import RevenueChart from "./components/RevenueChart";
 import SearchBar from "./components/SearchBar";
+import StatCard from "./components/StatCard";
+import RevenueChart from "./components/RevenueChart";
+import VendorChart from "./components/VendorChart";
+import InvoiceTable from "./components/InvoiceTable";
 
 function App() {
   const [stats, setStats] = useState({
@@ -24,15 +26,13 @@ function App() {
 
   return (
     <div className="layout">
-      {/* Sidebar */}
       <div className="sidebar">
         <Sidebar />
       </div>
 
-      {/* Main Content */}
       <div className="content">
         <Header />
-        
+
         <SearchBar />
 
         <div className="dashboard-cards">
@@ -44,7 +44,7 @@ function App() {
 
           <StatCard
             title="Total Revenue"
-            value={`$${stats.revenue.toLocaleString()}`}
+            value={`$${Number(stats.revenue).toLocaleString()}`}
             trend="↑ 12% from last month"
           />
 
@@ -61,9 +61,16 @@ function App() {
           />
         </div>
 
-        <RevenueChart />
+        <div className="charts-row">
+          <RevenueChart />
+          <VendorChart />
+        </div>
 
         <InvoiceTable />
+
+        <footer className="footer">
+          © 2026 Smart Retail Reconciler | Built with React + Flask + BigQuery
+        </footer>
       </div>
     </div>
   );
