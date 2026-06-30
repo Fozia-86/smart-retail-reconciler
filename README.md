@@ -124,7 +124,7 @@ React Dashboard
 Clone the repository
 
 ```bash
-git clone <your-github-repository>
+git clone https://github.com/Fozia-86/smart-retail-reconciler
 ```
 
 Backend
@@ -173,7 +173,7 @@ https://your-frontend.onrender.com
 Add your Backend URL here
 
 ```
-https://your-backend.onrender.com
+https://smart-retail-reconciler-1.onrender.com
 ```
 
 ---
